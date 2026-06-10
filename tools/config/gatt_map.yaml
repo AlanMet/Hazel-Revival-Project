@@ -1,0 +1,114 @@
+# Razer Zephyr GATT map — verified on hardware 2026-06-10
+# Session: captures/session-20260610-173104.log (reads + Hazel writes ACK 0x02)
+# Builders: src/zephyr_re/protocol/packets.py (product), src/zephyr_re_dev/protocol/hazel_write.py (dev)
+# Docs: research/protocol.md, research/device-state.md
+# Two-packet commands use `writes:` — header ATT write, then payload write.
+
+device_name_patterns:
+  - Zephyr
+  - Razer
+  - Hazel
+
+service_uuid: "52401523-F97C-7F90-0E7F-6C6F4E36DB1C"
+write_char_uuid: "52401524-F97C-7F90-0E7F-6C6F4E36DB1C"
+notify_char_uuid: "52401525-F97C-7F90-0E7F-6C6F4E36DB1C"
+extra_notify_char_uuid: "52401526-F97C-7F90-0E7F-6C6F4E36DB1C"
+battery_service_char_uuid: "00002a19-0000-1000-8000-00805f9b34fb"
+
+request_id_start: 0x30
+
+commands:
+  read_battery:
+    write: "30 00 00 00 05 81 00 01"
+    expect_notify: true
+    response_timeout_ms: 500
+
+  read_external_color:
+    write: "31 00 00 00 10 84 00 00"
+    expect_notify: true
+    response_timeout_ms: 500
+
+  # External zone 0x05 — static color (effect type 1)
+  set_external_color:
+    writes:
+      - "{req:02x} 07 00 00 10 03 00 05"
+      - "01 00 00 01 {r:02x} {g:02x} {b:02x}"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_external_brightness:
+    writes:
+      - "{req:02x} 01 00 00 10 05 00 05"
+      - "{brightness:02x}"
+    expect_notify: true
+    response_timeout_ms: 2000
+
+  set_external_effect_static:
+    writes:
+      - "{req:02x} 07 00 00 10 03 00 05"
+      - "01 00 00 01 {r:02x} {g:02x} {b:02x}"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_external_effect_breathing:
+    writes:
+      - "{req:02x} 04 00 00 10 03 00 05"
+      - "02 00 00 00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_external_effect_spectrum:
+    writes:
+      - "{req:02x} 04 00 00 10 03 00 05"
+      - "03 00 00 00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_external_effect_wave:
+    writes:
+      - "{req:02x} 04 00 00 10 03 00 05"
+      - "04 01 32 00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_external_effect_off:
+    writes:
+      - "{req:02x} 01 00 00 10 03 00 05"
+      - "00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_internal_light_on:
+    writes:
+      - "{req:02x} 07 00 00 10 03 00 01"
+      - "01 00 00 01 {r:02x} {g:02x} {b:02x}"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_internal_light_off:
+    writes:
+      - "{req:02x} 01 00 00 10 03 00 01"
+      - "00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_fan_off:
+    writes:
+      - "{req:02x} 06 00 00 11 01 01 00"
+      - "01 00 00 00 00 00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_fan_low:
+    writes:
+      - "{req:02x} 06 00 00 11 01 01 00"
+      - "01 00 01 00 01 00"
+    expect_notify: true
+    response_timeout_ms: 1500
+
+  set_fan_high:
+    writes:
+      - "{req:02x} 06 00 00 11 01 01 00"
+      - "01 00 02 00 02 00"
+    expect_notify: true
+    response_timeout_ms: 1500

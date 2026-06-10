@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zephyr-re"
+version = "0.1.0"
+description = "Razer Zephyr BLE control library and terminal app"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bleak>=0.22.0",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+zephyr-re = "zephyr_re.cli.app:main"
+zephyr-re-dev = "zephyr_re_dev.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

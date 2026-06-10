@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+.venv*/
+venv/
+env/
+*.egg
+
+# Session / local data
+research/captures/
+archive/
+tools/config/known_devices.yaml
+
+# Legacy app binaries
+legacy/apk/*.apk
+legacy/apk/decompiled/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
