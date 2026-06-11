@@ -4,6 +4,8 @@ Open-source control for the **Razer Zephyr** mask, fan speed and lighting over B
 
 Razer discontinued the official Hazel app. This project replaces it.
 
+Project made with AI.
+
 ## Documentation
 
 **[docs/](docs/README.md)** explains how the mask works and how to control it:
