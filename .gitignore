@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+apps/mobile/node_modules/
+apps/mobile/www/
+apps/mobile/android/
+apps/mobile/ios/
+
+apps/web/.serve-certs/
+
+.DS_Store
+*.log

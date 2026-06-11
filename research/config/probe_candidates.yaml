@@ -1,0 +1,249 @@
+# Vendor READ commands: one write frame each, collect notify replies.
+# These are cheap: use before brute-forcing writes.
+
+vendor_reads:
+ - name: read_battery_key
+ writes:
+ - "{req:02x} 00 00 00 05 81 00 01"
+ - name: read_color_key
+ writes:
+ - "{req:02x} 00 00 00 10 84 00 00"
+ - name: read_brightness_key
+ writes:
+ - "{req:02x} 00 00 00 10 85 01 01"
+ - name: read_effect_key
+ writes:
+ - "{req:02x} 00 00 00 10 83 00 00"
+ - name: read_brightness_external_zone5
+ writes:
+ - "{req:02x} 00 00 00 10 85 00 05"
+ - name: read_brightness_internal_zone1
+ writes:
+ - "{req:02x} 00 00 00 10 85 00 01"
+ - name: read_effect_external_zone5
+ writes:
+ - "{req:02x} 00 00 00 10 83 00 05"
+ - name: read_fan_speed
+ writes:
+ - "{req:02x} 00 00 00 11 81 01 00"
+ - name: read_firmware
+ writes:
+ - "{req:02x} 00 00 00 00 81 00 00"
+ - name: read_charging
+ writes:
+ - "{req:02x} 00 00 00 05 85 00 00"
+ - name: read_power_timeout
+ writes:
+ - "{req:02x} 00 00 00 05 84 00 00"
+ - name: read_sleep_timeout
+ writes:
+ - "{req:02x} 00 00 00 05 82 00 00"
+ - name: read_dpi_stages
+ writes:
+ - "{req:02x} 00 00 00 0b 84 01 00"
+ - name: read_zone_catalog
+ writes:
+ - "{req:02x} 00 00 00 10 80 00 01"
+ - name: read_internal_zone_state_02
+ writes:
+ - "{req:02x} 00 00 00 10 83 00 02"
+ - name: read_internal_zone_state_01
+ writes:
+ - "{req:02x} 00 00 00 10 83 00 01"
+ - name: read_internal_zone_color_02
+ writes:
+ - "{req:02x} 00 00 00 10 84 00 02"
+ - name: read_internal_zone_color_01
+ writes:
+ - "{req:02x} 00 00 00 10 84 00 01"
+
+# APK-accurate Hazel writes (ChromaFirmwareEffectFactoryProtocol3): try these first.
+# {r} {g} {b} = 0-255. {fan} = 0 off, 1 low, 2 high.
+
+external_color:
+ - name: hazel_zone5_static_apk
+ writes:
+ - "{req:02x} 07 00 00 10 03 00 05"
+ - "01 00 00 01 {r:02x} {g:02x} {b:02x}"
+ - name: hazel_zone5_brightness_apk
+ writes:
+ - "{req:02x} 01 00 00 10 05 00 05"
+ - "{brightness:02x}"
+ - name: mouse_two_packet
+ writes:
+ - "{req:02x} 08 00 00 10 04 00 00"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: mouse_single_packet
+ writes:
+ - "{req:02x} 08 00 00 10 04 00 00 04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: mouse_alt_key_10040101
+ writes:
+ - "{req:02x} 08 00 00 10 04 01 01"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: mouse_alt_key_10040100
+ writes:
+ - "{req:02x} 08 00 00 10 04 01 00"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: key_11040000_two_packet
+ writes:
+ - "{req:02x} 08 00 00 11 04 00 00"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: key_04040000_two_packet
+ writes:
+ - "{req:02x} 08 00 00 04 04 00 00"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: rgb_payload_only_marker
+ writes:
+ - "{req:02x} 04 00 00 10 04 00 00"
+ - "00 {r:02x} {g:02x} {b:02x}"
+ - name: rgb_no_prefix_byte
+ writes:
+ - "{req:02x} 03 00 00 10 04 00 00"
+ - "{r:02x} {g:02x} {b:02x}"
+
+# Try these manually if mask is on rainbow/spectrum: stop animation before setting color.
+external_effect_static:
+ - name: hazel_zone5_spectrum_apk
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 05"
+ - "03 00 00 00"
+ - name: hazel_zone5_breathing_apk
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 05"
+ - "02 00 00 00"
+ - name: hazel_zone5_off_apk
+ writes:
+ - "{req:02x} 01 00 00 10 03 00 05"
+ - "00"
+ - name: hazel_zone5_wave_apk
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 05"
+ - "04 01 5a 00"
+ - name: mouse_static_u32_le
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 00 00 00 00"
+ - name: mouse_static_u8
+ writes:
+ - "{req:02x} 01 00 00 10 03 00 00 00"
+ - name: static_two_packet
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00"
+ - "00 00 00 00"
+ - name: static_u32_be
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 00 00 00 00"
+ - name: key_10030100_static
+ writes:
+ - "{req:02x} 04 00 00 10 03 01 00 00 00 00 00"
+ - name: key_10030101_static
+ writes:
+ - "{req:02x} 04 00 00 10 03 01 01 00 00 00 00"
+ - name: key_10030001_static
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 01 00 00 00 00"
+ - name: key_11030000_static
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 00 00 00 00"
+ - name: key_0f030000_static
+ writes:
+ - "{req:02x} 04 00 00 0f 03 00 00 00 00 00 00"
+ - name: effect_byte_only
+ writes:
+ - "{req:02x} 01 00 00 10 03 00 00 {effect:02x}"
+ - name: effect_u32_param_0
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 {effect:02x} 00 00 00"
+ - name: lighting_mode_00
+ writes:
+ - "{req:02x} 01 00 00 10 03 00 01 00"
+ - name: lighting_mode_00_u32
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 01 00 00 00 00"
+ - name: stop_spectrum_write_8
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 08 00 00 00"
+ - name: stop_spectrum_then_static
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 08 00 00 00"
+ - "{req:02x} 04 00 00 10 03 00 00 00 00 00 00"
+ - name: external_zone_10038501
+ writes:
+ - "{req:02x} 01 00 00 10 03 85 01 00"
+ - name: external_zone_10030500
+ writes:
+ - "{req:02x} 01 00 00 10 05 03 00 00"
+
+# Stop spectrum (mode 0) then set legacy frame color: try before raw color probes.
+external_static_then_color:
+ - name: static_mode_then_legacy_red
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00"
+ - "00 00 00 00"
+ - "{req:02x} 08 00 00 10 04 00 00"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: static_mode_single_packet_then_color
+ writes:
+ - "{req:02x} 04 00 00 10 03 00 00 00 00 00 00"
+ - "{req:02x} 08 00 00 10 04 00 00"
+ - "04 00 00 00 00 {r:02x} {g:02x} {b:02x}"
+ - name: v3pro_zone02_static_red
+ writes:
+ - "{req:02x} 0a 00 00 10 03 00 02"
+ - "01 01 00 01 {r:02x} {g:02x} {b:02x} 00 00 00"
+ - name: v3pro_zone00_static_red
+ writes:
+ - "{req:02x} 0a 00 00 10 03 00 00"
+ - "01 00 00 01 {r:02x} {g:02x} {b:02x} 00 00 00"
+
+# Internal mouth light: zone 0x01 (Hazel applyFirmwareEffect).
+internal_light:
+ - name: hazel_zone1_static_apk
+ writes:
+ - "{req:02x} 07 00 00 10 03 00 01"
+ - "01 00 00 01 {r:02x} {g:02x} {b:02x}"
+ - name: hazel_zone1_off_apk
+ writes:
+ - "{req:02x} 01 00 00 10 03 00 01"
+ - "00"
+ - name: zone01_on_green_zephyr_marker
+ writes:
+ - "{req:02x} 0a 00 00 10 03 00 01"
+ - "01 01 00 01 00 ff 00 00 00 00"
+ - name: zone01_on_rgb
+ writes:
+ - "{req:02x} 0a 00 00 10 03 00 01"
+ - "01 01 00 01 {r:02x} {g:02x} {b:02x} 00 00 00"
+ - name: zone01_off_zephyr_marker
+ writes:
+ - "{req:02x} 0a 00 00 10 03 00 01"
+ - "00 01 00 01 00 00 00 00 00 00"
+ - name: zone01_on_opensnek_marker
+ writes:
+ - "{req:02x} 0a 00 00 10 03 00 01"
+ - "01 00 00 01 {r:02x} {g:02x} {b:02x} 00 00 00"
+
+# Fan speed: APK Hazel.createSetFanSpeed (class 0x11). Notify mirror: 52401526 `05 39 XX`.
+fan_speed:
+ - name: hazel_fan_apk
+ writes:
+ - "{req:02x} 06 00 00 11 01 01 00"
+ - "01 00 {fan:02x} 00 {fan:02x} 00"
+ - name: mirror_prefix_u8
+ writes:
+ - "{req:02x} 01 00 00 05 39 00 00"
+ - "{fan:02x}"
+ - name: mirror_prefix_single
+ writes:
+ - "{req:02x} 01 00 00 05 39 00 {fan:02x}"
+ - name: mirror_full_frame
+ writes:
+ - "{req:02x} 08 00 00 05 39 00 00"
+ - "{fan:02x} 00 00 00 00 00 00 00"
+ - name: class10_fan
+ writes:
+ - "{req:02x} 01 00 00 10 39 00 00"
+ - "{fan:02x}"
+ - name: class10_fan_zone01
+ writes:
+ - "{req:02x} 01 00 00 10 39 00 01"
+ - "{fan:02x}"

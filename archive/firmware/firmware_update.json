@@ -1,0 +1,10 @@
+{
+  "update_label" : "",
+  "firmare_release_label" : "01.00.09.00",
+  "url" : "https://mobileapp-assets-staging.razerzone.com/zephyr/base/01.00.09.00/01.00.09.00.zip",
+  "changes" : "<br />Minor bug fixes",
+  "min_ios_build_version" : "1.0.0",
+  "min_android_build_version" : 1,
+  "show_mapping" : "false",
+  "firmware_version" : "01.00.09.00"
+}

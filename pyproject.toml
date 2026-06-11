@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hazel-revive"
+version = "0.1.0"
+description = "Open-source control for the Razer Zephyr mask"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bleak>=0.22.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+desktop = [
+    "PyQt6>=6.6.0",
+    "qasync>=0.27.0",
+]
+cli = [
+    "rich>=13.0",
+]
+
+[project.scripts]
+zephyr-smoke = "zephyr_re.cli.smoke:main"
+
+[tool.setuptools.packages.find]
+where = ["packages"]

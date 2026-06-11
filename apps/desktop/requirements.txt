@@ -1,0 +1,2 @@
+-e ../../[desktop]
+pyyaml>=6.0
