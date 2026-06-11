@@ -1,66 +1,66 @@
-# Razer Zephyr
+# Razer Zephyr control
 
-Open-source BLE control for the Razer Zephyr. The official Hazel app was discontinued; this library implements the same fan and lighting features.
+Control your **Razer Zephyr** mask from your computer — fan speed and lighting (internal and external).
 
-## Layout
+Razer discontinued the official **Hazel** app. This project replaces it.
 
-```
-docs/features.md     User-facing feature list
-src/zephyr_re/       Product library + zephyr-re CLI
-src/zephyr_re_dev/   RE tools (optional): zephyr-re-dev
-research/            Protocol notes and findings
-tools/               Emulator, Frida, probe configs
-legacy/apk/          Original Hazel APK (not in git)
-```
+## Desktop app (recommended on PC)
 
-## Install
-
-Python 3.11+ recommended on macOS:
+Native window — same UI as the web app, uses system Bluetooth (works on Linux, Windows, macOS):
 
 ```bash
-python3.11 -m venv .venv311
-source .venv311/bin/activate
-pip install -e .
+./run-desktop.sh
 ```
 
-## Use
+Pair the mask in Bluetooth settings first. See [desktop/README.md](desktop/README.md).
+
+## Visual web app (browser)
+
+Graphical UI served locally over HTTPS — needs Chromium + Web Bluetooth:
 
 ```bash
-zephyr-re
+./run-local.sh
 ```
 
-Pair the mask first (hold multifunction ~4s until internal LEDs blink blue).
+Then open **https://127.0.0.1:8765** in **Chromium or Chrome** (accept the certificate warning once). Pair the mask in system Bluetooth settings, then **Connect** in the app.
 
-### Library
+**Linux + Chromium:** enable `chrome://flags/#enable-experimental-web-platform-features`, relaunch, reload.
 
-```python
-import asyncio
-from zephyr_re import Zephyr
+Do **not** open `public/index.html` as a file — Web Bluetooth needs the HTTPS server above.
 
-async def main():
-    z = Zephyr()
-    await z.connect()
-    await z.fan_low()
-    await z.external_wave()
-    await z.disconnect()
+## Hosted copy (optional)
 
-asyncio.run(main())
-```
+Same visual app, deployed to GitHub Pages: [alanmet.github.io/Hazel-Revival-Project](https://alanmet.github.io/Hazel-Revival-Project/) — local `./run-local.sh` is usually fresher.
 
-### Architecture
+**LAN:** `./run-local.sh` also listens on your Wi‑Fi IP (`https://192.168.x.x:8765`) for phone/tablet on the same network (Android Chrome only; iOS has no Web Bluetooth).
 
-| Layer | Module |
-|-------|--------|
-| Transport | `zephyr_re.ble.connector.ZephyrConnector` |
-| Features | `zephyr_re.Zephyr` — one method per app feature |
-| Packets | `zephyr_re.protocol.packets` |
-| Vendor I/O | `zephyr_re.protocol.vendor` |
+### Troubleshooting “Web Bluetooth not available”
 
-## Dev / reverse engineering
+1. **Browser:** Chromium or Edge only — not Firefox.
+2. **URL:** `https://127.0.0.1:8765` via `./run-local.sh` — not `file://`, not plain `http://`.
+3. The page **Diagnostics** panel should show `Secure context: true` and `navigator.bluetooth: yes`.
+4. **Linux:** enable `chrome://flags/#enable-experimental-web-platform-features`, relaunch Chromium.
+
+On Arch: `sudo pacman -S chromium`
+
+## What you need
+
+- Razer Zephyr, paired over Bluetooth to the **same device** running the browser
+- **Chrome or Edge** (desktop Linux/macOS/Windows, or Chrome on Android)
+- Not Firefox — Mozilla does not ship Web Bluetooth
+
+## Legacy CLI (optional, terminal only)
+
+For RE/debugging — not the visual app:
 
 ```bash
-pip install -e .
-zephyr-re-dev
+./run-cli.sh
 ```
 
-See [research/README.md](research/README.md). Emulator setup: [research/hazel-app-ui.md](research/hazel-app-ui.md).
+## What you can control
+
+Fan off / low / high, internal lighting (static, spectrum, breathing, off), external lighting (same plus wave). Full list: [features.md](features.md).
+
+---
+
+**Developers / reverse engineering:** see [reverse-engineering/README.md](reverse-engineering/README.md).

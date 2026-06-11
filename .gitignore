@@ -9,19 +9,22 @@ build/
 .venv/
 .venv*/
 venv/
+venv*/
 env/
 *.egg
 
-# Session / local data
-research/captures/
+# Session / local data (reverse-engineering)
+reverse-engineering/research/captures/
 archive/
-tools/config/known_devices.yaml
+reverse-engineering/tools/config/known_devices.yaml
 
-# Legacy app binaries
-legacy/apk/*.apk
-legacy/apk/decompiled/
+# Legacy app binaries (reverse-engineering)
+reverse-engineering/legacy/apk/*.apk
+reverse-engineering/legacy/apk/decompiled/
 
-# IDE / OS
+# Local HTTPS dev certs
+.serve-certs/
+
 .idea/
 .vscode/
 *.swp

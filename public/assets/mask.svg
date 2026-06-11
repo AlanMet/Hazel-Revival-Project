@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" fill="none" role="img" aria-label="Razer Zephyr">
+  <defs>
+    <linearGradient id="shell" x1="200" y1="40" x2="200" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2a2a2e"/>
+      <stop offset="1" stop-color="#121214"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="200" y1="80" x2="200" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#44d62c" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#44d62c" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- outer shell -->
+  <path d="M200 24c-92 0-156 58-156 132v88c0 88 52 152 156 188 104-36 156-100 156-188v-88C356 82 292 24 200 24z" fill="url(#shell)" stroke="#3a3a40" stroke-width="2"/>
+  <!-- chroma ring hint -->
+  <ellipse cx="200" cy="190" rx="118" ry="108" stroke="url(#ring)" stroke-width="18" filter="url(#glow)"/>
+  <!-- visor -->
+  <path d="M128 118c0-18 32-34 72-34s72 16 72 34v52c0 28-32 48-72 48s-72-20-72-48v-52z" fill="#0c0c0e" stroke="#2e2e34" stroke-width="2"/>
+  <!-- mouth / internal LED area -->
+  <rect x="158" y="228" width="84" height="36" rx="18" fill="#111114" stroke="#44d62c" stroke-opacity="0.4" stroke-width="1.5"/>
+  <!-- vents / fan -->
+  <g stroke="#3a3a40" stroke-width="2">
+    <line x1="168" y1="352" x2="232" y2="352"/>
+    <line x1="162" y1="368" x2="238" y2="368"/>
+    <line x1="168" y1="384" x2="232" y2="384"/>
+  </g>
+  <text x="200" y="456" text-anchor="middle" fill="#5a5a62" font-family="system-ui,sans-serif" font-size="11">Replace with assets/mask.webp for a product photo</text>
+</svg>

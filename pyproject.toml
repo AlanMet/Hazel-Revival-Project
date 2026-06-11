@@ -15,11 +15,15 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = []
+desktop = [
+    "customtkinter>=5.2.0",
+    "Pillow>=10.0",
+]
 
 [project.scripts]
 zephyr-re = "zephyr_re.cli.app:main"
 zephyr-re-dev = "zephyr_re_dev.cli:main"
+hazel-revival = "hazel_revival.app:main"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["reverse-engineering", "reverse-engineering/src", "desktop"]

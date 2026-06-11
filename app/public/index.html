@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hazel Revival</title>
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <h1>Hazel Revival</h1>
+    <p class="status" id="status">Loading…</p>
+    <div class="actions">
+      <button type="button" id="connect">Connect</button>
+      <button type="button" id="disconnect" disabled>Disconnect</button>
+    </div>
+
+    <figure class="mask-preview" id="mask-preview" aria-label="Zephyr mask preview">
+      <img
+        class="mask-preview__base"
+        src="assets/mask/hero.jpg"
+        alt="Razer Zephyr wearable air purifier"
+        width="800"
+        height="656"
+      />
+      <div class="mask-preview__lights">
+        <div class="light-zone light-zone--ring" data-zone="external-left"></div>
+        <div class="light-zone light-zone--ring" data-zone="external-right"></div>
+        <div class="light-zone light-zone--internal" data-zone="internal"></div>
+      </div>
+      <div class="mask-preview__glare" aria-hidden="true"></div>
+    </figure>
+
+    <section class="lighting-panel" aria-label="Lighting preview controls">
+      <h2>Internal zone</h2>
+      <div class="lighting-row">
+        <label for="internal-effect">Effect</label>
+        <select id="internal-effect">
+          <option value="off">Off</option>
+          <option value="static" selected>Static</option>
+          <option value="spectrum">Spectrum</option>
+          <option value="breathing">Breathing</option>
+        </select>
+      </div>
+      <div class="lighting-row">
+        <label for="internal-color">Colour</label>
+        <input type="color" id="internal-color" value="#44e8ff" />
+      </div>
+      <div class="lighting-row">
+        <label for="internal-color2">Colour 2</label>
+        <input type="color" id="internal-color2" value="#a855f7" />
+      </div>
+      <div class="lighting-row">
+        <label for="internal-opacity">Opacity</label>
+        <input type="range" id="internal-opacity" min="0.1" max="0.7" step="0.02" value="0.38" />
+      </div>
+    </section>
+
+    <section class="lighting-panel" aria-label="External lighting preview controls">
+      <h2>External zone</h2>
+      <div class="lighting-row">
+        <label for="external-effect">Effect</label>
+        <select id="external-effect">
+          <option value="off">Off</option>
+          <option value="static" selected>Static</option>
+          <option value="spectrum">Spectrum</option>
+          <option value="breathing">Breathing</option>
+        </select>
+      </div>
+      <div class="lighting-row">
+        <label for="external-color">Colour</label>
+        <input type="color" id="external-color" value="#44ff44" />
+      </div>
+      <div class="lighting-row">
+        <label for="external-color2">Colour 2</label>
+        <input type="color" id="external-color2" value="#ff44aa" />
+      </div>
+      <div class="lighting-row">
+        <label for="external-opacity">Opacity</label>
+        <input type="range" id="external-opacity" min="0.1" max="0.9" step="0.02" value="0.55" />
+      </div>
+    </section>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

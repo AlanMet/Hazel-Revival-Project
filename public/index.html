@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hazel Revival — Razer Zephyr</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <div class="bg-glow" aria-hidden="true"></div>
+
+    <main class="app">
+      <header class="site-header">
+        <p class="eyebrow">Reverse Engineered Replacement for Zephyr</p>
+        <h1>Hazel Revival</h1>
+        <p class="lede">Control fan speed and lighting of Razer Zephyr from your browser.</p>
+      </header>
+
+      <!-- Unsupported browser -->
+      <section class="card card-error" id="view-unsupported" hidden>
+        <div class="error-icon" aria-hidden="true">!</div>
+        <h2 id="error-title">Browser not supported</h2>
+        <p class="error-msg" id="error-message"></p>
+        <p class="error-hint" id="error-hint"></p>
+        <ol class="error-steps" id="error-steps"></ol>
+      </section>
+
+      <!-- Walkthrough + connect -->
+      <p class="platform-notice" id="platform-notice-macos" hidden></p>
+
+      <section class="card onboarding-card" id="view-onboarding" data-step="1">
+        <nav class="setup-progress" aria-label="Setup progress">
+          <div class="setup-progress__item is-active" data-step="1">
+            <span class="setup-progress__dot"></span>
+            <span class="setup-progress__label">Pair</span>
+          </div>
+          <div class="setup-progress__track" aria-hidden="true"></div>
+          <div class="setup-progress__item" data-step="2">
+            <span class="setup-progress__dot"></span>
+            <span class="setup-progress__label">Connect</span>
+          </div>
+        </nav>
+
+        <div class="onboarding-phase" id="phase-pair">
+          <div class="setup-panel">
+            <div class="setup-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                  d="M7 7l10 10-5 5V2l5 5L7 17"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 class="setup-title">Pair your mask</h2>
+            <p class="setup-lede">Use your system Bluetooth settings — not this page.</p>
+            <ol class="setup-steps">
+              <li>Hold the multifunction button for about 4 seconds</li>
+              <li>Wait until the internal LEDs blink blue twice</li>
+              <li>Add <strong>Razer Zephyr</strong> in Bluetooth settings</li>
+            </ol>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary btn-with-arrow"
+            id="next-pair"
+            aria-label="Continue — I've paired in Bluetooth settings"
+          >
+            Continue
+          </button>
+        </div>
+
+        <div class="onboarding-phase" id="phase-connect" hidden>
+          <div class="setup-panel">
+            <div class="setup-icon setup-icon--connect" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                  d="M10 13a5 5 0 0 0 7.54.54l2.46-2.46a5 5 0 0 0-7.07-7.07l-1.41 1.41"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M14 11a5 5 0 0 0-7.54-.54L4 12.92a5 5 0 0 0 7.07 7.07l1.41-1.41"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h2 class="setup-title">Connect in browser</h2>
+            <p class="setup-lede">Web Bluetooth links this page to your already-paired mask.</p>
+          </div>
+          <button type="button" class="btn btn-primary btn-with-arrow" id="connect">Connect mask</button>
+          <button type="button" class="btn btn-ghost connect-alt" id="connect-all">
+            Can't see it? Show all Bluetooth devices
+          </button>
+          <p class="setup-footnote">
+            Choose <strong>Razer Zephyr</strong> in the list. If you only see hex codes, tap
+            “Show all Bluetooth devices” and try each until one connects.
+          </p>
+        </div>
+
+        <p class="status setup-status" id="status" role="status"></p>
+        <pre class="connect-log" id="connect-log" hidden aria-live="polite"></pre>
+      </section>
+
+      <!-- Connected: interactive mask -->
+      <section class="control-stage" id="view-control" hidden>
+        <div class="control-top">
+          <div class="connection-pill">
+            <span class="dot"></span>
+            <span id="device-name">Razer Zephyr</span>
+          </div>
+          <button type="button" class="btn btn-ghost" id="disconnect">Disconnect</button>
+        </div>
+
+        <p class="control-hint">Tap a ring or zone on the mask to open controls.</p>
+
+        <div class="mask-stage" id="mask-stage">
+          <img
+            class="mask-photo"
+            src="assets/mask.jpg"
+            alt="Razer Zephyr — tap the side rings, mouth light, or fan pod"
+            width="1217"
+            height="815"
+          />
+
+          <div class="mask-zones">
+            <button
+              type="button"
+              class="zone zone-external"
+              data-zone="external"
+              aria-label="External lighting — side rings"
+            >
+              <span class="zone-ring"></span>
+              <span class="zone-label">External</span>
+            </button>
+            <button
+              type="button"
+              class="zone zone-internal"
+              data-zone="internal"
+              aria-label="Internal lighting — mouth glow"
+            >
+              <span class="zone-ring"></span>
+              <span class="zone-label">Internal</span>
+            </button>
+            <button
+              type="button"
+              class="zone zone-fan"
+              data-zone="fan"
+              aria-label="Fan speed — intake pod"
+            >
+              <span class="zone-ring"></span>
+              <span class="zone-label">Fan</span>
+            </button>
+          </div>
+        </div>
+
+        <aside class="dock" id="dock" hidden>
+          <header class="dock-head">
+            <h2 id="dock-title">External lighting</h2>
+            <button type="button" class="dock-close" id="dock-close" aria-label="Close">×</button>
+          </header>
+          <div class="dock-body" id="dock-body"></div>
+        </aside>
+      </section>
+
+      <details class="diag-wrap">
+        <summary>Diagnostics</summary>
+        <pre class="diag" id="diag"></pre>
+      </details>
+
+      <footer class="site-footer">
+        <span id="app-version" aria-label="App version"></span>
+      </footer>
+    </main>
+
+    <!-- Control templates (cloned into dock) -->
+    <template id="tpl-fan">
+      <div class="toggles" data-group="fan">
+        <button type="button" class="chip effect-btn" data-action="fanLow">Low</button>
+        <button type="button" class="chip effect-btn" data-action="fanHigh">High</button>
+        <button type="button" class="chip effect-btn" data-action="fanOff">Off</button>
+      </div>
+    </template>
+
+    <template id="tpl-internal">
+      <div class="toggles" data-group="internal">
+        <button type="button" class="chip effect-btn" data-opens="internal-static">Static</button>
+        <button type="button" class="chip effect-btn" data-action="internalSpectrum">Spectrum</button>
+        <button type="button" class="chip effect-btn" data-action="internalBreathing">Breathing</button>
+        <button type="button" class="chip effect-btn" data-action="internalOff">Off</button>
+      </div>
+      <div class="submenu hidden" id="internal-static" data-group="internal">
+        <label class="color-picker-field">
+          <span class="submenu-label">Colour</span>
+          <input
+            type="color"
+            class="live-color"
+            data-action="internalStatic"
+            value="#ffffff"
+          />
+        </label>
+      </div>
+    </template>
+
+    <template id="tpl-external">
+      <div class="toggles" data-group="external">
+        <button type="button" class="chip effect-btn" data-opens="external-static">Static</button>
+        <button type="button" class="chip effect-btn" data-action="externalSpectrum">Spectrum</button>
+        <button type="button" class="chip effect-btn" data-action="externalBreathing">Breathing</button>
+        <button type="button" class="chip effect-btn" data-opens="external-wave">Wave</button>
+        <button type="button" class="chip effect-btn" data-action="externalOff">Off</button>
+      </div>
+      <div class="submenu hidden" id="external-static" data-group="external">
+        <label class="color-picker-field">
+          <span class="submenu-label">Colour</span>
+          <input
+            type="color"
+            class="live-color"
+            data-action="externalStatic"
+            value="#ffffff"
+          />
+        </label>
+      </div>
+      <div class="submenu hidden" id="external-wave" data-group="external">
+        <p class="submenu-label">Wave speed</p>
+        <div class="toggles" data-subgroup="external-wave">
+          <button type="button" class="chip wave-btn" data-action="externalWave" data-wave-rate="15">Fast</button>
+          <button type="button" class="chip wave-btn" data-action="externalWave" data-wave-rate="50">Medium</button>
+          <button type="button" class="chip wave-btn" data-action="externalWave" data-wave-rate="100">Slow</button>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      // Walkthrough step 1 → 2 (works even if ES modules fail to load)
+      function advanceSetupToConnect() {
+        const card = document.getElementById("view-onboarding");
+        const pair = document.getElementById("phase-pair");
+        const connect = document.getElementById("phase-connect");
+        if (!card || !pair || !connect) return;
+        card.dataset.step = "2";
+        for (const item of card.querySelectorAll(".setup-progress__item")) {
+          const n = Number(item.dataset.step);
+          item.classList.toggle("is-active", n === 2);
+          item.classList.toggle("is-done", n < 2);
+        }
+        pair.hidden = true;
+        connect.hidden = false;
+        const status = document.getElementById("status");
+        if (status) status.textContent = "";
+        connect.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      document.getElementById("view-onboarding")?.addEventListener("click", (event) => {
+        if (!event.target.closest("#next-pair")) return;
+        event.preventDefault();
+        advanceSetupToConnect();
+      });
+    </script>
+    <script type="module">
+      import { connectLog } from "./js/connect-log.js";
+      import { APP_VERSION } from "./js/version.js";
+
+      const versionEl = document.getElementById("app-version");
+      if (versionEl) versionEl.textContent = `v${APP_VERSION}`;
+
+      connectLog(`boot: Hazel Revival v${APP_VERSION}`);
+
+      import(`./js/main.js?v=${APP_VERSION}`).catch((err) => {
+        const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+        connectLog(`boot: module load FAILED — ${msg}`);
+        const status = document.getElementById("status");
+        if (status) status.textContent = `App failed to load: ${msg}`;
+        console.error(err);
+      });
+    </script>
+  </body>
+</html>
