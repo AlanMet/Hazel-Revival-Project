@@ -21,7 +21,7 @@ Razer discontinued the official Hazel app. This project replaces it.
 |-----|-----|
 | Desktop (Python + PyQt6) | `./apps/desktop/run.sh` |
 | Mobile (Capacitor) | `cd apps/mobile && npm run build && npx cap sync` |
-| Web (Web Bluetooth) | `./apps/web/run.sh` → https://127.0.0.1:8765 |
+| Web (Web Bluetooth) | `./apps/web/run.sh` → http://127.0.0.1:8765 |
 | CLI smoke test | `python -m zephyr_re.cli.smoke --scan` |
 
 Install the Python library once: `pip install -e ".[desktop]"` from the repo root.

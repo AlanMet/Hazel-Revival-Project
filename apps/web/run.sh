@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Visual Hazel Revive UI — serves public/ over HTTPS for Web Bluetooth.
+# Visual Hazel Revive UI — serves public/ over HTTP for Web Bluetooth.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -15,7 +15,7 @@ open_browser() {
 
 is_hazel_server() {
   local port="$1"
-  curl -sk --max-time 2 "https://127.0.0.1:${port}/js/version.js" 2>/dev/null | grep -q "APP_VERSION"
+  curl -s --max-time 2 "http://127.0.0.1:${port}/js/version.js" 2>/dev/null | grep -q "APP_VERSION"
 }
 
 port_in_use() {
@@ -29,7 +29,7 @@ echo "  Mask photo · tap zones · fan & lighting controls"
 echo ""
 
 if is_hazel_server "$REQUESTED_PORT"; then
-  URL="https://127.0.0.1:${REQUESTED_PORT}/"
+  URL="http://127.0.0.1:${REQUESTED_PORT}/"
   echo "Server already running — opening ${URL}"
   echo ""
   open_browser "$URL"
@@ -53,7 +53,7 @@ if port_in_use "$PORT"; then
   fi
 fi
 
-URL="https://127.0.0.1:${PORT}/"
+URL="http://127.0.0.1:${PORT}/"
 echo "  1. Pair Razer Zephyr in system Bluetooth settings"
 echo "  2. Open in Chromium/Chrome: ${URL}"
 echo "  3. Linux: chrome://flags/#enable-experimental-web-platform-features"

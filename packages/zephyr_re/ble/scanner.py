@@ -103,7 +103,7 @@ def parse_macos_connected_devices(
     *,
     show_all: bool = False,
 ) -> list[BleDevice]:
-    """Parse system_profiler for paired devices currently marked Connected: Yes."""
+    """Parse system_profiler for devices listed under the Connected section."""
     try:
         proc = subprocess.run(
             ["system_profiler", "SPBluetoothDataType"],
@@ -117,13 +117,36 @@ def parse_macos_connected_devices(
     if proc.returncode != 0 or not proc.stdout.strip():
         return []
 
+    return _parse_macos_bluetooth_output(
+        proc.stdout,
+        name_patterns=name_patterns,
+        show_all=show_all,
+    )
+
+
+def _parse_macos_bluetooth_output(
+    text: str,
+    *,
+    name_patterns: list[str] | None,
+    show_all: bool,
+) -> list[BleDevice]:
+    """Parse SPBluetoothDataType text (legacy flat list or Sequoia+ section layout)."""
     devices: list[BleDevice] = []
     current_name: str | None = None
     current_address: str | None = None
     connected = False
+    in_connected_section = False
+    use_section_format = False
 
-    device_header = re.compile(r"^ {4}([^:]+):\s*$")
-    address_line = re.compile(r"^ {6}Address:\s+(.+)$", re.IGNORECASE)
+    # Sequoia+: devices grouped under "Connected:" / "Not Connected:"
+    section_connected = re.compile(r"^ {6}Connected:\s*$")
+    section_not_connected = re.compile(r"^ {6}Not Connected:\s*$")
+    device_header_new = re.compile(r"^ {10}([^:]+):\s*$")
+    address_line_new = re.compile(r"^ {14}Address:\s+(.+)$", re.IGNORECASE)
+
+    # Legacy: flat device entries with "Connected: Yes"
+    device_header_old = re.compile(r"^ {4}([^:]+):\s*$")
+    address_line_old = re.compile(r"^ {6}Address:\s+(.+)$", re.IGNORECASE)
 
     def flush() -> None:
         nonlocal current_name, current_address, connected
@@ -140,13 +163,36 @@ def parse_macos_connected_devices(
         current_address = None
         connected = False
 
-    for line in proc.stdout.splitlines():
-        header = device_header.match(line)
+    for line in text.splitlines():
+        if section_connected.match(line):
+            use_section_format = True
+            flush()
+            in_connected_section = True
+            continue
+        if section_not_connected.match(line):
+            flush()
+            in_connected_section = False
+            continue
+
+        if use_section_format:
+            header = device_header_new.match(line)
+            if header:
+                flush()
+                current_name = header.group(1).strip()
+                connected = in_connected_section
+                continue
+            addr = address_line_new.match(line)
+            if addr:
+                current_address = addr.group(1).strip()
+                continue
+            continue
+
+        header = device_header_old.match(line)
         if header:
             flush()
             current_name = header.group(1).strip()
             continue
-        addr = address_line.match(line)
+        addr = address_line_old.match(line)
         if addr:
             current_address = addr.group(1).strip()
             continue

@@ -31,18 +31,18 @@ export function getWebBluetoothStatus() {
   if (location.protocol === "file:") {
     return {
       ok: false,
-      title: "Open over HTTPS",
+      title: "Open via local server",
       message: "This page was opened as a local file.",
-      hint: "Run apps/web/run.sh and open https://127.0.0.1:8765",
+      hint: "Run apps/web/run.sh and open http://127.0.0.1:8765",
     };
   }
 
   if (!window.isSecureContext) {
     return {
       ok: false,
-      title: "HTTPS required",
-      message: "Web Bluetooth needs a secure connection.",
-      hint: "Run apps/web/run.sh and open https://127.0.0.1:8765",
+      title: "Localhost required",
+      message: "Web Bluetooth needs a secure context (localhost or HTTPS).",
+      hint: "Run apps/web/run.sh and open http://127.0.0.1:8765",
     };
   }
 
@@ -61,6 +61,6 @@ export function getWebBluetoothStatus() {
   return { ok: true };
 }
 
-export const MACOS_UNSUPPORTED_MESSAGE =
-  "macOS isn’t supported — Web Bluetooth can’t connect to the Zephyr on Mac. " +
-  "Use an iPhone with Bluefy, or Chrome on Android.";
+export const MACOS_CONNECT_HINT =
+  "On macOS, disconnect Razer Zephyr in System Settings → Bluetooth before connecting here. " +
+  "If the browser picker fails, use the desktop app: ./apps/desktop/run.sh";

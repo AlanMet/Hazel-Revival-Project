@@ -3,7 +3,7 @@
 import {
   getEnvironment,
   getWebBluetoothStatus,
-  MACOS_UNSUPPORTED_MESSAGE,
+  MACOS_CONNECT_HINT,
 } from "./browser.js";
 import { clearConnectLog, connectLog } from "./connect-log.js";
 import { formatDisplayDeviceName } from "./protocol/constants.js";
@@ -105,8 +105,7 @@ export function bindUi(orchestrator, elements) {
     if (!platformNoticeMacos) return;
     if (env.isMacOs) {
       platformNoticeMacos.hidden = false;
-      platformNoticeMacos.textContent = MACOS_UNSUPPORTED_MESSAGE;
-      setConnectButtonsDisabled(true);
+      platformNoticeMacos.textContent = MACOS_CONNECT_HINT;
     } else {
       platformNoticeMacos.hidden = true;
     }
@@ -179,10 +178,6 @@ export function bindUi(orchestrator, elements) {
   });
 
   async function onConnectClick({ acceptAll = false } = {}) {
-    if (getEnvironment().isMacOs) {
-      setStatus(MACOS_UNSUPPORTED_MESSAGE);
-      return;
-    }
     clearConnectLog();
     connectLog(`ui: Connect clicked (acceptAll=${acceptAll})`);
     setStatus("Connecting…");
